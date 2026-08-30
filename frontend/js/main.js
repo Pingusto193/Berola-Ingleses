@@ -150,25 +150,78 @@ function cartaoProduto(p) {
 
 function montarCardapio(categorias) {
   const alvo = document.getElementById('cardapio-lista');
-  const comProduto = (categorias || []).filter((c) => c.produtos.length > 0);
+  const filtros = document.getElementById('cardapio-filtros');
+  const status = document.getElementById('cardapio-status');
+  const lista = categorias || [];
 
-  if (!comProduto.length) {
+  if (!lista.length) {
+    filtros.hidden = true;
+    status.textContent = '';
     alvo.innerHTML = '<p class="cardapio-vazio">Cardápio em breve.</p>';
     return;
   }
 
-  alvo.innerHTML = comProduto
-    .map(
-      (cat) => `
-      <div class="cardapio-cat">
-        <h3>${esc(cat.nome)}</h3>
-        ${cat.descricao ? `<p class="cardapio-cat__desc">${esc(cat.descricao)}</p>` : ''}
+  filtros.hidden = false;
+  filtros.innerHTML = `
+    <button class="cardapio-filtro" type="button" data-categoria="todos" aria-pressed="true" aria-controls="cardapio-lista">
+      Todos
+    </button>
+    ${lista.map((categoria) => `
+      <button class="cardapio-filtro" type="button" data-categoria="${esc(categoria.id)}" aria-pressed="false" aria-controls="cardapio-lista">
+        ${esc(categoria.nome)}
+      </button>`).join('')}`;
+
+  function mostrarCategoria(id) {
+    const categoria = id === 'todos'
+      ? null
+      : lista.find((item) => String(item.id) === id);
+    if (id !== 'todos' && !categoria) return;
+
+    const produtos = categoria
+      ? categoria.produtos || []
+      : lista.flatMap((item) => item.produtos || []);
+
+    filtros.querySelectorAll('[data-categoria]').forEach((botao) => {
+      const selecionado = botao.dataset.categoria === id;
+      botao.classList.toggle('ativo', selecionado);
+      botao.setAttribute('aria-pressed', String(selecionado));
+    });
+
+    const apresentacao = categoria
+      ? `<div class="cardapio-categoria">
+          <h3>${esc(categoria.nome)}</h3>
+          ${categoria.descricao ? `<p>${esc(categoria.descricao)}</p>` : ''}
+        </div>`
+      : '';
+
+    if (!produtos.length) {
+      alvo.innerHTML = `${apresentacao}<p class="cardapio-vazio">Nenhum produto disponível nesta categoria.</p>`;
+    } else {
+      alvo.innerHTML = `${apresentacao}
         <div class="cardapio-grid">
-          ${cat.produtos.map(cartaoProduto).join('')}
-        </div>
-      </div>`
-    )
-    .join('');
+          ${produtos.map(cartaoProduto).join('')}
+        </div>`;
+    }
+
+    const quantidade = produtos.length === 1 ? '1 produto exibido' : `${produtos.length} produtos exibidos`;
+    status.textContent = categoria ? `${quantidade} em ${categoria.nome}.` : `${quantidade} no cardápio.`;
+  }
+
+  filtros.onclick = (evento) => {
+    const botao = evento.target.closest('[data-categoria]');
+    if (!botao) return;
+
+    mostrarCategoria(botao.dataset.categoria);
+
+    const esquerda = botao.offsetLeft - (filtros.clientWidth - botao.offsetWidth) / 2;
+    const movimentoReduzido = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    filtros.scrollTo({
+      left: Math.max(0, esquerda),
+      behavior: movimentoReduzido ? 'auto' : 'smooth',
+    });
+  };
+
+  mostrarCategoria('todos');
 }
 
 // -------------------------------------------------------------------- Boot
