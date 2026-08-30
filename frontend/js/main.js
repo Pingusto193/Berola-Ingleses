@@ -69,22 +69,6 @@ function montarHero(hero) {
   // marca do CSS já cobre o espaço.
 }
 
-function montarDestaques(lista) {
-  document.getElementById('destaques').innerHTML = lista
-    .map(
-      (d) => `
-    <article class="card">
-      ${midia(d.imagemUrl, d.altText, 'ratio-4-3', 'Foto do prato', 'card__midia')}
-      <div class="card__corpo">
-        <h3>${esc(d.titulo)}</h3>
-        <p>${esc(d.texto)}</p>
-        <a class="btn btn--contorno" href="${esc(d.linkBotao)}">${esc(d.textoBotao)}</a>
-      </div>
-    </article>`
-    )
-    .join('');
-}
-
 function montarVisite(visite) {
   document.getElementById('visite-titulo').textContent = visite.titulo;
   document.getElementById('visite-texto').textContent = visite.texto;
@@ -205,7 +189,6 @@ try {
   if (dados.hero) montarHero(dados.hero);
   // Entra depois do hero pra herdar o fundo/vídeo já montado atrás dele
   montarCarrosselHero(dados.heroImagens || [], document.getElementById('inicio'));
-  montarDestaques(dados.destaques || []);
   montarCardapio(dados.cardapio || []);
   if (dados.visite) montarVisite(dados.visite);
   montarContato(dados.contato || []);

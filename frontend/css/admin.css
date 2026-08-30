@@ -49,7 +49,12 @@ h3 { font-size: 0.95rem; margin: var(--e-6) 0 var(--e-3); }
 
 /* ------------------------------------------------------------ Layout ----- */
 
-.painel { display: grid; grid-template-columns: 220px 1fr; min-height: 100vh; }
+.painel {
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr);
+  width: 100%;
+  min-height: 100vh;
+}
 
 .lateral {
   background: var(--marinho);
@@ -83,7 +88,17 @@ h3 { font-size: 0.95rem; margin: var(--e-6) 0 var(--e-3); }
 .lateral__rodape .btn-a { color: rgba(255,255,255,.85); border-color: rgba(255,255,255,.3); }
 .lateral__rodape .btn-a:hover { background: rgba(255,255,255,.12); color: var(--branco); }
 
-.conteudo { padding: var(--e-8); max-width: 1000px; }
+.conteudo {
+  width: 100%;
+  min-width: 0;
+  max-width: 1000px;
+  padding: var(--e-8);
+}
+
+.secao-admin {
+  width: 100%;
+  min-width: 0;
+}
 
 .secao-admin__topo {
   display: flex; align-items: center; justify-content: space-between;
@@ -98,6 +113,9 @@ h3 { font-size: 0.95rem; margin: var(--e-6) 0 var(--e-3); }
 .bloco__explicacao { color: var(--cinza-600); margin: -0.5rem 0 var(--e-4); line-height: 1.6; }
 
 .bloco {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
   background: var(--branco);
   border: 1px solid var(--borda);
   border-radius: var(--raio);
@@ -112,7 +130,7 @@ h3 { font-size: 0.95rem; margin: var(--e-6) 0 var(--e-3); }
 
 /* -------------------------------------------------------------- Campos --- */
 
-.campo { margin-bottom: var(--e-4); }
+.campo { min-width: 0; margin-bottom: var(--e-4); }
 .campo label {
   display: block; margin-bottom: var(--e-1);
   font-family: var(--fonte-titulo); font-weight: 600;
@@ -125,12 +143,22 @@ h3 { font-size: 0.95rem; margin: var(--e-6) 0 var(--e-3); }
 .campo select,
 .campo textarea {
   width: 100%;
+  min-width: 0;
+  max-width: 100%;
   padding: 0.55rem 0.75rem;
   font-family: inherit; font-size: var(--t-sm);
   color: var(--cinza-800);
   border: 1px solid var(--cinza-200);
   border-radius: 8px;
   background: var(--branco);
+}
+.campo input[type="file"] {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  font-family: inherit;
+  font-size: var(--t-sm);
 }
 .campo textarea { min-height: 90px; resize: vertical; line-height: 1.6; }
 .campo input:focus, .campo textarea:focus, .campo select:focus {
@@ -254,6 +282,22 @@ body.arraste-ativo { user-select: none; -webkit-user-select: none; }
 .midia__preview.tem-foto { border-style: solid; border-color: var(--borda); }
 .midia__controles { flex: 1; min-width: 0; }
 
+/* O seletor nativo de arquivo possui uma largura minima grande em alguns
+   celulares. Estes limites fazem o controle respeitar o card onde esta. */
+.secao-admin[data-secao="site"] .item,
+.secao-admin[data-secao="site"] .midia,
+.secao-admin[data-secao="site"] .midia__controles {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+}
+
+/* Horarios: tres colunas no desktop, sem deixar o seletor de hora impor uma
+   largura maior que a coluna disponivel. */
+.horario-item__campos { align-items: end; }
+.horario-item__campo { min-width: 0; margin: 0; }
+.horario-item input[type="time"] { min-width: 0; max-width: 100%; }
+
 .toggle { display: inline-flex; align-items: center; gap: var(--e-2); cursor: pointer;
   font-size: var(--t-xs); color: var(--marinho); font-weight: 600; }
 .toggle input { width: 17px; height: 17px; accent-color: var(--azul); cursor: pointer; }
@@ -351,6 +395,16 @@ body.arraste-ativo { user-select: none; -webkit-user-select: none; }
   .produto { flex-direction: column; }
   .midia { flex-direction: column; }
   .midia__preview { width: 100%; max-width: 220px; }
+
+  /* No celular cada horario ocupa sua propria linha. Assim os controles
+     continuam grandes para o toque sem disputar metade da tela. */
+  .horario-item__campos { grid-template-columns: minmax(0, 1fr); }
+  .horario-item .btn-a {
+    width: 100%;
+    max-width: 100%;
+    margin-top: var(--e-4);
+    white-space: normal;
+  }
 
   /* 16px no minimo evita o iOS dar zoom automatico ao focar um campo */
   .campo input, .campo select, .campo textarea { font-size: 16px; }

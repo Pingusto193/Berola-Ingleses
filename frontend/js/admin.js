@@ -445,7 +445,7 @@ function formProduto(p = null) {
       <div class="midia__controles">
         <div class="campo">
           <label for="f-prod-arquivo">Foto do produto</label>
-          <input type="file" id="f-prod-arquivo" accept="image/*" capture="environment">
+          <input type="file" id="f-prod-arquivo" accept="image/*">
           <div class="campo__dica">Escolha uma foto do celular ou tire uma na hora. Até 8MB.</div>
         </div>
       </div>
@@ -642,7 +642,7 @@ function formDestaqueHero(h = null) {
       <div class="midia__controles">
         <div class="campo">
           <label for="f-hero-arquivo">Foto *</label>
-          <input type="file" id="f-hero-arquivo" accept="image/*" capture="environment">
+          <input type="file" id="f-hero-arquivo" accept="image/*">
           <div class="campo__dica">Escolha do celular ou tire na hora. É a foto que aparece grande no início do site.</div>
         </div>
       </div>
@@ -913,19 +913,19 @@ async function carregarHorarios() {
   alvo.innerHTML = DIAS.map((nome, dia) => {
     const h = porDia.get(dia) ?? { aberto: false, abreEm: '08:00', fechaEm: '19:00' };
     return `
-    <div class="item" data-dia="${dia}">
-      <div class="linha-3" style="align-items:end">
-        <div class="campo" style="margin:0">
+    <div class="item horario-item" data-dia="${dia}">
+      <div class="linha-3 horario-item__campos">
+        <div class="campo horario-item__campo">
           <label>${esc(nome)}</label>
           <label class="toggle">
             <input type="checkbox" data-campo="aberto" ${h.aberto ? 'checked' : ''}> Aberto
           </label>
         </div>
-        <div class="campo" style="margin:0">
+        <div class="campo horario-item__campo">
           <label>Abre</label>
           <input type="time" data-campo="abreEm" value="${esc(h.abreEm)}">
         </div>
-        <div class="campo" style="margin:0">
+        <div class="campo horario-item__campo">
           <label>Fecha</label>
           <input type="time" data-campo="fechaEm" value="${esc(h.fechaEm)}">
         </div>
@@ -987,7 +987,7 @@ function montarDestaques(lista) {
         <div class="midia__controles">
           <div class="campo">
             <label>Ícone ou imagem (opcional)</label>
-            <input type="file" data-arquivo accept="image/*" capture="environment">
+            <input type="file" data-arquivo accept="image/*">
           </div>
         </div>
       </div>
@@ -1045,7 +1045,7 @@ function montarVisiteImagens(itens) {
         <div class="midia__controles">
           <div class="campo">
             <label>Foto</label>
-            <input type="file" data-arquivo accept="image/*" capture="environment">
+            <input type="file" data-arquivo accept="image/*">
           </div>
         </div>
       </div>

@@ -471,32 +471,6 @@ img { max-width: 100%; display: block; }
 }
 
 
-/* ------------------------------------------------------------- Cards ----- */
-
-.cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: var(--e-8);
-}
-.card {
-  background: var(--branco);
-  border: 1px solid var(--borda);
-  border-radius: var(--raio);
-  overflow: hidden;
-  display: flex; flex-direction: column;
-  transition: transform var(--transicao), box-shadow var(--transicao);
-}
-.card:hover { transform: translateY(-4px); box-shadow: var(--sombra-alta); }
-.card__midia.ph { border-width: 0 0 2px 0; border-radius: 0; }
-.card__midia.foto { border-radius: 0; }
-.card__corpo {
-  padding: var(--e-6);
-  display: flex; flex-direction: column; flex: 1; gap: var(--e-2);
-}
-.card__corpo h3 { margin-bottom: 0; }
-.card__corpo p { font-size: var(--t-sm); flex: 1; }
-.card__corpo .btn { align-self: flex-start; margin-top: var(--e-2); }
-
 /* ------------------------------------------------------------ Visite ----- */
 
 .visite { display: grid; grid-template-columns: 1fr 1fr; gap: var(--e-16); align-items: center; }
