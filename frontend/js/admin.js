@@ -959,7 +959,7 @@ async function carregarSite() {
 
   preencher('hero', d.hero, ['headline', 'subtitulo']);
   preencher('cfg', d.config, ['tituloDestaques', 'subtituloDestaques', 'tituloCardapio', 'subtituloCardapio']);
-  preencher('visite', d.visite, ['titulo', 'texto', 'textoBotao', 'linkBotao']);
+  preencher('visite', d.visite, ['titulo', 'texto']);
 
   montarDestaques(d.destaques ?? []);
   montarVisiteImagens(d.visite?.imagens ?? []);
@@ -1076,7 +1076,7 @@ const SALVAR = {
   restaurante: () => api.salvarRestaurante(coletar('rest', ['nome', 'sobre', 'endereco', 'mapaUrl'])),
   hero: () => api.salvarHero(coletar('hero', ['headline', 'subtitulo'])),
   config: () => api.salvarConfig(coletar('cfg', ['tituloDestaques', 'subtituloDestaques', 'tituloCardapio', 'subtituloCardapio'])),
-  visite: () => api.salvarVisite(coletar('visite', ['titulo', 'texto', 'textoBotao', 'linkBotao'])),
+  visite: () => api.salvarVisite(coletar('visite', ['titulo', 'texto'])),
   horarios: () => {
     const horarios = [...document.querySelectorAll('#lista-horarios .item')].map((item) => ({
       diaSemana: Number(item.dataset.dia),

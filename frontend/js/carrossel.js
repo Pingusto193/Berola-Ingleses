@@ -19,7 +19,7 @@
 //    lento no celular.
 // ============================================================================
 
-const DURACAO_SLIDE = 3200;   // ms que cada destaque fica na tela
+const DURACAO_SLIDE = 4200;   // ms que cada destaque fica na tela
 const TOTAL_KB = 6;           // quantidade de movimentos Ken Burns disponíveis
 
 const esc = (t) =>

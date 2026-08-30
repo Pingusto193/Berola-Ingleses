@@ -88,9 +88,9 @@ function montarDestaques(lista) {
 function montarVisite(visite) {
   document.getElementById('visite-titulo').textContent = visite.titulo;
   document.getElementById('visite-texto').textContent = visite.texto;
-  const btn = document.getElementById('visite-btn');
-  btn.textContent = visite.textoBotao;
-  btn.href = visite.linkBotao;
+  // Sem botao aqui de proposito: "Fale com a gente" (rodape) ja tem a
+  // localizacao - um segundo botao "Como Chegar" levando pro mesmo lugar
+  // era redundante.
 
   document.getElementById('visite-fotos').innerHTML = visite.imagens
     .map((img, i) =>
