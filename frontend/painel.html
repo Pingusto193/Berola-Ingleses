@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Painel — Berola Ingleses</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Nunito+Sans:wght@400;600&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="/css/tokens.css">
+<link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+
+<!-- Cobre a tela inteira assim que a pagina carrega - o transicao.js encolhe
+     esse circulo pra revelar o painel, dando sequencia a animacao que
+     comecou no botao "Entrar" do login. -->
+<div id="cobertura-circulo" aria-hidden="true"></div>
+
+<!-- ============================================================= Painel -->
+<div class="painel" id="tela-painel" hidden>
+
+  <aside class="lateral">
+    <div class="lateral__marca">
+      <strong>Berola</strong>
+      <span>painel</span>
+    </div>
+    <nav class="menu" id="menu">
+      <button class="menu__item" data-secao="categorias">Categorias</button>
+      <button class="menu__item" data-secao="produtos">Produtos</button>
+      <button class="menu__item" data-secao="hero-imagens">Destaques do início</button>
+      <button class="menu__item" data-secao="restaurante">Informações</button>
+      <button class="menu__item" data-secao="contatos">Contatos</button>
+      <button class="menu__item" data-secao="horarios">Horários</button>
+      <button class="menu__item" data-secao="site">Conteúdo do site</button>
+    </nav>
+    <div class="lateral__rodape">
+      <a class="btn-a btn-a--fantasma largura-total" href="/" target="_blank" rel="noopener">Ver o site</a>
+      <button class="btn-a btn-a--fantasma largura-total" id="btn-sair" type="button">Sair</button>
+    </div>
+  </aside>
+
+  <main class="conteudo" id="conteudo">
+
+    <!-- ----------------------------------------------------- Categorias -->
+    <section class="secao-admin" data-secao="categorias" hidden>
+      <header class="secao-admin__topo">
+        <h1>Categorias</h1>
+        <button class="btn-a btn-a--primario" data-novo="categoria" type="button">+ Nova categoria</button>
+      </header>
+      <p class="secao-admin__dica">Segure o ícone <strong>⠿</strong> e arraste para mudar a ordem em que aparecem no site.</p>
+      <div id="lista-categorias"></div>
+    </section>
+
+    <!-- ------------------------------------------------------- Produtos -->
+    <section class="secao-admin" data-secao="produtos" hidden>
+      <header class="secao-admin__topo">
+        <h1>Produtos</h1>
+        <button class="btn-a btn-a--primario" data-novo="produto" type="button">+ Novo produto</button>
+      </header>
+      <p class="secao-admin__dica">Segure o ícone <strong>⠿</strong> e arraste para mudar a ordem em que aparecem no cardápio.</p>
+      <div class="filtros">
+        <label for="filtro-categoria">Categoria:</label>
+        <select id="filtro-categoria"><option value="">Todas</option></select>
+      </div>
+      <div id="lista-produtos"></div>
+    </section>
+
+    <!-- ---------------------------------------------- Imagens destaque -->
+    <section class="secao-admin" data-secao="hero-imagens" hidden>
+      <header class="secao-admin__topo">
+        <h1>Destaques do início</h1>
+        <button class="btn-a btn-a--primario" data-novo="hero-imagem" type="button">+ Novo destaque</button>
+      </header>
+      <p class="secao-admin__dica">
+        Escolha produtos, promoções ou novidades para aparecerem em destaque no início do site.
+        Só a foto é obrigatória. Arraste pelo ícone <strong>⠿</strong> para mudar a ordem em que aparecem.
+      </p>
+      <div id="lista-hero"></div>
+    </section>
+
+    <!-- --------------------------------------------------- Restaurante -->
+    <section class="secao-admin" data-secao="restaurante" hidden>
+      <header class="secao-admin__topo"><h1>Informações</h1></header>
+      <div class="bloco">
+        <div class="campo">
+          <label for="rest-nome">Nome do estabelecimento</label>
+          <input type="text" id="rest-nome">
+        </div>
+        <div class="campo">
+          <label for="rest-sobre">Sobre o estabelecimento</label>
+          <textarea id="rest-sobre"></textarea>
+        </div>
+        <div class="campo">
+          <label for="rest-endereco">Endereço</label>
+          <input type="text" id="rest-endereco">
+        </div>
+        <div class="campo">
+          <label for="rest-mapaUrl">Link do mapa</label>
+          <input type="text" id="rest-mapaUrl" placeholder="https://maps.google.com/...">
+          <div class="campo__dica">Cole aqui o link do Google Maps do seu endereço.</div>
+        </div>
+        <button class="btn-a btn-a--marinho" data-salvar="restaurante" type="button">Salvar</button>
+      </div>
+    </section>
+
+    <!-- ------------------------------------------------------- Contatos -->
+    <section class="secao-admin" data-secao="contatos" hidden>
+      <header class="secao-admin__topo">
+        <h1>Contatos</h1>
+        <button class="btn-a btn-a--primario" data-novo="contato" type="button">+ Adicionar contato</button>
+      </header>
+      <p class="secao-admin__dica">
+        Segure o ícone <strong>⠿</strong> pra reordenar. Desmarcar “Mostrar no site” esconde o contato sem apagá-lo.
+      </p>
+      <div id="lista-contatos"></div>
+    </section>
+
+    <!-- ------------------------------------------------------- Horários -->
+    <section class="secao-admin" data-secao="horarios" hidden>
+      <header class="secao-admin__topo"><h1>Horários</h1></header>
+      <div class="bloco">
+        <div id="lista-horarios"></div>
+        <button class="btn-a btn-a--marinho" data-salvar="horarios" type="button">Salvar horários</button>
+      </div>
+    </section>
+
+    <!-- --------------------------------------------- Conteúdo do site -->
+    <section class="secao-admin" data-secao="site" hidden>
+      <header class="secao-admin__topo"><h1>Conteúdo do site</h1></header>
+
+      <div class="bloco">
+        <h2>Topo do site</h2>
+        <p class="bloco__explicacao">A primeira coisa que a pessoa vê ao abrir o site.</p>
+        <div class="campo">
+          <label for="hero-headline">Título principal</label>
+          <textarea id="hero-headline" rows="2"></textarea>
+        </div>
+        <div class="campo">
+          <label for="hero-subtitulo">Subtítulo</label>
+          <textarea id="hero-subtitulo" rows="3"></textarea>
+        </div>
+        <button class="btn-a btn-a--marinho" data-salvar="hero" type="button">Salvar</button>
+      </div>
+
+      <div class="bloco">
+        <h2>Títulos das seções</h2>
+        <p class="bloco__explicacao">
+          Os textos de apresentação que aparecem antes dos destaques e do cardápio. Escreva do jeito que quiser.
+        </p>
+        <h3>Seção “Por que escolher a gente”</h3>
+        <div class="campo">
+          <label for="cfg-tituloDestaques">Título</label>
+          <input type="text" id="cfg-tituloDestaques">
+        </div>
+        <div class="campo">
+          <label for="cfg-subtituloDestaques">Texto</label>
+          <textarea id="cfg-subtituloDestaques" rows="2"></textarea>
+        </div>
+        <h3>Seção do cardápio</h3>
+        <div class="campo">
+          <label for="cfg-tituloCardapio">Título</label>
+          <input type="text" id="cfg-tituloCardapio">
+        </div>
+        <div class="campo">
+          <label for="cfg-subtituloCardapio">Texto</label>
+          <textarea id="cfg-subtituloCardapio" rows="2"></textarea>
+        </div>
+        <button class="btn-a btn-a--marinho" data-salvar="config" type="button">Salvar</button>
+      </div>
+
+      <div class="bloco">
+        <h2>Destaques do estabelecimento</h2>
+        <p class="bloco__explicacao">
+          Pequenos cards que aparecem no site mostrando características importantes do lugar —
+          como qualidade dos produtos, ambiente, atendimento, ingredientes, etc.
+        </p>
+        <div id="lista-destaques"></div>
+        <button class="btn-a btn-a--fantasma" data-novo="destaque" type="button">+ Adicionar card</button>
+      </div>
+
+      <div class="bloco">
+        <h2>Seção “Visite a gente”</h2>
+        <p class="bloco__explicacao">
+          A parte do site que apresenta o espaço físico e convida os clientes a conhecer o local.
+        </p>
+        <div class="campo">
+          <label for="visite-titulo">Título</label>
+          <input type="text" id="visite-titulo">
+        </div>
+        <div class="campo">
+          <label for="visite-texto">Texto</label>
+          <textarea id="visite-texto"></textarea>
+        </div>
+        <div class="linha">
+          <div class="campo">
+            <label for="visite-textoBotao">Texto do botão</label>
+            <input type="text" id="visite-textoBotao">
+          </div>
+          <div class="campo">
+            <label for="visite-linkBotao">Link do botão</label>
+            <input type="text" id="visite-linkBotao">
+          </div>
+        </div>
+        <button class="btn-a btn-a--marinho" data-salvar="visite" type="button">Salvar textos</button>
+        <h3>Fotos do local</h3>
+        <div id="lista-visite-imagens"></div>
+        <button class="btn-a btn-a--fantasma" data-novo="visite-imagens" type="button">+ Adicionar foto</button>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- ============================================================== Modal -->
+<div class="modal" id="modal" hidden>
+  <div class="modal__caixa" role="dialog" aria-modal="true" aria-labelledby="modal-titulo">
+    <h2 id="modal-titulo"></h2>
+    <div id="modal-corpo"></div>
+    <div class="modal__acoes">
+      <button class="btn-a btn-a--fantasma" id="modal-cancelar" type="button">Cancelar</button>
+      <button class="btn-a btn-a--primario" id="modal-confirmar" type="button">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast" hidden></div>
+
+<script type="module" src="/js/admin.js"></script>
+</body>
+</html>

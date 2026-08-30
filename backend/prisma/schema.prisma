@@ -1,0 +1,224 @@
+// Schema local (Postgres). Os nomes de tabela/coluna abaixo sao os mesmos
+// que serao usados no Supabase, para que a migracao final seja quase uma
+// copia do SQL.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ===========================================================================
+// ADMINISTRACAO
+// ===========================================================================
+
+// A senha NUNCA e guardada em texto puro: senhaHash e um digest scrypt
+// com salt aleatorio por usuario (ver backend/lib/seguranca.js).
+model AdminUser {
+  id           Int      @id @default(autoincrement())
+  usuario      String   @unique
+  senhaHash    String   @map("senha_hash")
+  ultimoLogin  DateTime? @map("ultimo_login")
+  criadoEm     DateTime @default(now()) @map("criado_em")
+  atualizadoEm DateTime @updatedAt @map("atualizado_em")
+
+  @@map("admin_users")
+}
+
+// ===========================================================================
+// CARDAPIO
+// ===========================================================================
+
+model Categoria {
+  id           Int       @id @default(autoincrement())
+  nome         String
+  descricao    String    @default("")
+  imagemUrl    String?   @map("imagem_url")
+  altText      String    @default("") @map("alt_text")
+  ordem        Int       @default(0)
+  ativo        Boolean   @default(true)
+  deletadoEm   DateTime? @map("deletado_em")
+  criadoEm     DateTime  @default(now()) @map("criado_em")
+  atualizadoEm DateTime  @updatedAt @map("atualizado_em")
+
+  produtos Produto[]
+
+  @@map("categorias")
+}
+
+model Produto {
+  id          Int     @id @default(autoincrement())
+  nome        String
+  descricao   String  @default("")
+  // Preco em CENTAVOS (inteiro). 1890 = R$ 18,90.
+  // Inteiro evita os erros de arredondamento de float em valor monetario.
+  precoCentavos Int   @default(0) @map("preco_centavos")
+  imagemUrl   String? @map("imagem_url")
+  altText     String  @default("") @map("alt_text")
+  link        String?
+
+  // disponivel: existe no cardapio mas acabou hoje
+  disponivel Boolean @default(true)
+  // destaque: aparece nas areas especiais do site
+  destaque   Boolean @default(false)
+  // ativo: faz parte do cardapio (soft delete)
+  ativo      Boolean @default(true)
+  ordem      Int     @default(0)
+
+  categoriaId Int       @map("categoria_id")
+  categoria   Categoria @relation(fields: [categoriaId], references: [id], onDelete: Restrict)
+
+  deletadoEm   DateTime? @map("deletado_em")
+  criadoEm     DateTime  @default(now()) @map("criado_em")
+  atualizadoEm DateTime  @updatedAt @map("atualizado_em")
+
+  @@index([categoriaId])
+  @@map("produtos")
+}
+
+// ===========================================================================
+// IMAGENS DE DESTAQUE (topo do site)
+// ===========================================================================
+
+// Destaques do inicio: o carrossel que aparece no topo do site.
+// Só a foto e obrigatoria - todo o resto (nome, preco, selo) e opcional,
+// entao da pra publicar um destaque so com a imagem.
+model HeroImagem {
+  id        Int     @id @default(autoincrement())
+  imagemUrl String? @map("imagem_url")
+  altText   String  @default("") @map("alt_text")
+
+  nome      String  @default("")
+  descricao String  @default("")
+  // Selo mostrado sobre a foto: promocao, novidade, mais-vendido...
+  tipo      String  @default("")
+  textoPromocional String @default("") @map("texto_promocional")
+
+  // Precos em CENTAVOS, iguais aos do produto. NULL = "sem preco", que e
+  // diferente de 0 - por isso sao opcionais, e nao @default(0).
+  precoCentavos       Int? @map("preco_centavos")
+  precoAntigoCentavos Int? @map("preco_antigo_centavos")
+
+  ordem        Int      @default(0)
+  ativo        Boolean  @default(true)
+  criadoEm     DateTime @default(now()) @map("criado_em")
+  atualizadoEm DateTime @updatedAt @map("atualizado_em")
+
+  @@map("hero_imagens")
+}
+
+// ===========================================================================
+// ESTABELECIMENTO
+// ===========================================================================
+
+// Singleton (id = 1): dados gerais do estabelecimento.
+model Restaurante {
+  id           Int      @id @default(1)
+  nome         String   @default("Berola Ingleses")
+  sobre        String   @default("")
+  endereco     String   @default("")
+  mapaUrl      String?  @map("mapa_url")
+  atualizadoEm DateTime @updatedAt @map("atualizado_em")
+
+  @@map("restaurante")
+}
+
+// Estrutura flexivel: da pra adicionar TikTok, Facebook, e-mail, delivery...
+// sem mexer no banco. Por isso `tipo` NAO e unico.
+model Contato {
+  id     Int     @id @default(autoincrement())
+  tipo   String  @map("canal")
+  rotulo String
+  valor  String
+  link   String?
+  ativo  Boolean @default(true)
+  ordem  Int     @default(0)
+
+  @@map("contato")
+}
+
+// Uma linha por dia da semana. diaSemana: 0 = domingo ... 6 = sabado.
+model HorarioFuncionamento {
+  id        Int     @id @default(autoincrement())
+  diaSemana Int     @unique @map("dia_semana")
+  aberto    Boolean @default(true)
+  abreEm    String  @default("08:00") @map("abre_em")
+  fechaEm   String  @default("19:00") @map("fecha_em")
+
+  @@map("horarios")
+}
+
+// ===========================================================================
+// CONTEUDO DO SITE (secoes ja existentes)
+// ===========================================================================
+
+model SiteConfig {
+  id             Int    @id @default(1)
+  ctaHeaderTexto String @map("cta_header_texto")
+  ctaHeaderLink  String @map("cta_header_link")
+
+  // Titulos das secoes do site publico - o dono escreve o que quiser aqui,
+  // sem precisar mexer em codigo.
+  tituloDestaques    String @default("Por que escolher a gente") @map("titulo_destaques")
+  subtituloDestaques String @default("Café bom, comida feita na casa e um lugar pra ficar à vontade.") @map("subtitulo_destaques")
+  tituloCardapio     String @default("Nosso cardápio") @map("titulo_cardapio")
+  subtituloCardapio  String @default("Tudo o que sai da nossa cozinha e do nosso balcão.") @map("subtitulo_cardapio")
+
+  @@map("site_config")
+}
+
+model Hero {
+  id                Int     @id @default(1)
+  headline          String
+  subtitulo         String
+  textoBotao        String  @map("texto_botao")
+  linkBotao         String  @map("link_botao")
+  videoUrl          String? @map("video_url")
+  imagemFallbackUrl String? @map("imagem_fallback_url")
+
+  @@map("hero")
+}
+
+model Destaque {
+  id         Int     @id @default(autoincrement())
+  imagemUrl  String? @map("imagem_url")
+  altText    String  @default("") @map("alt_text")
+  titulo     String
+  texto      String
+  textoBotao String  @map("texto_botao")
+  linkBotao  String  @map("link_botao")
+  ordem      Int     @default(0)
+
+  @@map("destaques")
+}
+
+model VisiteAGente {
+  id         Int    @id @default(1)
+  titulo     String
+  texto      String
+  textoBotao String @map("texto_botao")
+  linkBotao  String @map("link_botao")
+
+  @@map("visite_a_gente")
+}
+
+model VisiteImagem {
+  id        Int     @id @default(autoincrement())
+  imagemUrl String? @map("imagem_url")
+  altText   String  @default("") @map("alt_text")
+  ordem     Int     @default(0)
+
+  @@map("visite_imagens")
+}
+
+model GaleriaItem {
+  id        Int     @id @default(autoincrement())
+  imagemUrl String? @map("imagem_url")
+  altText   String  @default("") @map("alt_text")
+  ordem     Int     @default(0)
+
+  @@map("galeria")
+}

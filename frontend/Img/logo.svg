@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 96" role="img" aria-label="Berola ingleses">
+  <title>Berola ingleses</title>
+  <text x="0" y="46"
+        font-family="Lufga, Poppins, system-ui, sans-serif"
+        font-size="52" font-weight="700" letter-spacing="-1.5">
+    <tspan class="logo-be" fill="#FECF00">Be</tspan><tspan class="logo-rola" fill="#1E3A8A">rola</tspan>
+  </text>
+  <text x="3" y="76" class="logo-ingleses"
+        font-family="Lufga, Poppins, system-ui, sans-serif"
+        font-size="24" font-weight="600" fill="#1E3A8A" letter-spacing="0.5">ingleses</text>
+  <rect x="176" y="62" width="52" height="9" rx="2" fill="#FECF00"/>
+</svg>

@@ -1,0 +1,76 @@
+/* ==========================================================================
+   Berola Ingleses - tokens de design
+   Fonte unica de verdade: cores, tipografia, espacamento, sombras.
+   ========================================================================== */
+
+:root {
+  /* Marca */
+  --marinho: #1e3a8a;
+  --azul: #2563eb;
+  --amarelo: #fecf00;
+  --amarelo-claro: #ffe082;
+  --creme: #fff5cc;
+
+  /* Neutros - nao existiam no manual, necessarios para hierarquia de texto */
+  --cinza-800: #1f2937;
+  --cinza-600: #4b5563;
+  --cinza-400: #9ca3af;
+  --cinza-200: #e5e7eb;
+  --branco: #ffffff;
+
+  /* Papeis semanticos.
+     REGRA: --amarelo nunca vira cor de texto sobre fundo claro (reprova AA).
+     Ele so aparece como fundo de botao, icone, borda e bloco. */
+  --texto-forte: var(--marinho);
+  --texto-corpo: var(--cinza-600);
+  --texto-claro: var(--branco);
+  --fundo: var(--branco);
+  --fundo-suave: #fffaf0;
+  --fundo-creme: var(--creme);
+  --borda: var(--cinza-200);
+
+  /* Tipografia
+     Lufga e Aloevera nao sao web fonts livres. Poppins e a geometrica mais
+     proxima da Lufga; Nunito Sans cobre o corpo. Ver README para trocar
+     pelas oficiais quando licenciadas. */
+  --fonte-titulo: 'Lufga', 'Poppins', system-ui, -apple-system, sans-serif;
+  --fonte-corpo: 'Aloevera', 'Nunito Sans', system-ui, -apple-system, sans-serif;
+
+  --t-xs: 0.8125rem;
+  --t-sm: 0.9375rem;
+  --t-base: 1.0625rem;
+  --t-lg: 1.25rem;
+  --t-xl: 1.5rem;
+  --t-2xl: clamp(1.75rem, 3.5vw, 2.5rem);
+  --t-3xl: clamp(2.25rem, 6vw, 4rem);
+
+  /* Espacamento */
+  --e-1: 0.25rem;
+  --e-2: 0.5rem;
+  --e-3: 0.75rem;
+  --e-4: 1rem;
+  --e-6: 1.5rem;
+  --e-8: 2rem;
+  --e-12: 3rem;
+  --e-16: 4rem;
+  --e-24: 6rem;
+
+  --raio: 14px;
+  --raio-pilula: 999px;
+  --sombra: 0 4px 16px rgba(30, 58, 138, 0.08);
+  --sombra-alta: 0 12px 32px rgba(30, 58, 138, 0.14);
+
+  --largura-max: 1180px;
+  --altura-header: 76px;
+  --transicao: 220ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Esconde a barra de rolagem em todo o site (site publico e painel) mas
+   mantem a rolagem funcionando normalmente - so o trilho visual some. */
+html {
+  scrollbar-width: none;      /* Firefox */
+  -ms-overflow-style: none;   /* Edge antigo */
+}
+html::-webkit-scrollbar {     /* Chrome, Safari, Edge novo */
+  display: none;
+}

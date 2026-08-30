@@ -1,0 +1,359 @@
+/* ==========================================================================
+   Painel administrativo - funcional antes de bonito.
+   O visual definitivo fica para uma etapa posterior.
+   ========================================================================== */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: var(--fonte-corpo);
+  font-size: var(--t-sm);
+  color: var(--cinza-800);
+  background: var(--fundo-suave);
+}
+
+h1, h2, h3 { font-family: var(--fonte-titulo); color: var(--marinho); margin: 0; }
+h1 { font-size: 1.4rem; }
+h2 { font-size: 1.05rem; }
+h3 { font-size: 0.95rem; margin: var(--e-6) 0 var(--e-3); }
+
+/* Cobre a tela inteira desde a primeira pintura da pagina (a folha de estilo
+   e' bloqueante, entao isso ja vale antes do JS rodar) - evita um flash do
+   conteudo real antes do circulo de transicao comecar a encolher. */
+#cobertura-circulo {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  background: var(--marinho);
+  pointer-events: none;
+}
+
+/* ------------------------------------------------------------- Login ----- */
+
+.login {
+  min-height: 100vh;
+  display: grid; place-items: center;
+  padding: var(--e-6);
+  background: linear-gradient(135deg, var(--marinho), var(--azul));
+}
+.login__caixa {
+  background: var(--branco);
+  padding: var(--e-8);
+  border-radius: var(--raio);
+  box-shadow: var(--sombra-alta);
+  width: 100%; max-width: 380px;
+}
+.login__caixa h2 { margin-bottom: var(--e-2); }
+.login__caixa p { color: var(--cinza-600); margin: 0 0 var(--e-6); }
+
+/* ------------------------------------------------------------ Layout ----- */
+
+.painel { display: grid; grid-template-columns: 220px 1fr; min-height: 100vh; }
+
+.lateral {
+  background: var(--marinho);
+  color: rgba(255, 255, 255, 0.9);
+  padding: var(--e-6) var(--e-4);
+  display: flex; flex-direction: column; gap: var(--e-6);
+  position: sticky; top: 0; height: 100vh;
+}
+.lateral__marca { line-height: 1.2; padding-inline: var(--e-2); }
+.lateral__marca strong {
+  display: block;
+  font-family: var(--fonte-titulo); font-size: 1.2rem; color: var(--amarelo);
+}
+.lateral__marca span { font-size: var(--t-xs); color: rgba(255, 255, 255, 0.6); }
+
+.menu { display: flex; flex-direction: column; gap: 2px; flex: 1; }
+.menu__item {
+  text-align: left;
+  background: none; border: 0; cursor: pointer;
+  color: rgba(255, 255, 255, 0.8);
+  font-family: var(--fonte-corpo); font-size: var(--t-sm);
+  padding: 0.6rem var(--e-3);
+  border-radius: 8px;
+  transition: background var(--transicao), color var(--transicao);
+}
+.menu__item:hover { background: rgba(255, 255, 255, 0.1); color: var(--branco); }
+.menu__item.ativo { background: var(--amarelo); color: var(--marinho); font-weight: 600; }
+.menu__item:focus-visible { outline: 2px solid var(--amarelo); outline-offset: 2px; }
+
+.lateral__rodape { display: flex; flex-direction: column; gap: var(--e-2); }
+.lateral__rodape .btn-a { color: rgba(255,255,255,.85); border-color: rgba(255,255,255,.3); }
+.lateral__rodape .btn-a:hover { background: rgba(255,255,255,.12); color: var(--branco); }
+
+.conteudo { padding: var(--e-8); max-width: 1000px; }
+
+.secao-admin__topo {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: var(--e-4); margin-bottom: var(--e-4); flex-wrap: wrap;
+}
+.secao-admin__dica { color: var(--cinza-600); margin: 0 0 var(--e-4); font-size: var(--t-xs); }
+
+/* -------------------------------------------------------------- Blocos --- */
+
+/* Texto de apoio no topo de cada bloco, explicando pra que ele serve -
+   escrito pra quem nunca mexeu num painel administrativo antes. */
+.bloco__explicacao { color: var(--cinza-600); margin: -0.5rem 0 var(--e-4); line-height: 1.6; }
+
+.bloco {
+  background: var(--branco);
+  border: 1px solid var(--borda);
+  border-radius: var(--raio);
+  padding: var(--e-6);
+  margin-bottom: var(--e-6);
+}
+.bloco > h2 {
+  padding-bottom: var(--e-3);
+  border-bottom: 2px solid var(--amarelo);
+  margin-bottom: var(--e-4);
+}
+
+/* -------------------------------------------------------------- Campos --- */
+
+.campo { margin-bottom: var(--e-4); }
+.campo label {
+  display: block; margin-bottom: var(--e-1);
+  font-family: var(--fonte-titulo); font-weight: 600;
+  font-size: var(--t-xs); color: var(--marinho);
+}
+.campo input[type="text"],
+.campo input[type="password"],
+.campo input[type="number"],
+.campo input[type="time"],
+.campo select,
+.campo textarea {
+  width: 100%;
+  padding: 0.55rem 0.75rem;
+  font-family: inherit; font-size: var(--t-sm);
+  color: var(--cinza-800);
+  border: 1px solid var(--cinza-200);
+  border-radius: 8px;
+  background: var(--branco);
+}
+.campo textarea { min-height: 90px; resize: vertical; line-height: 1.6; }
+.campo input:focus, .campo textarea:focus, .campo select:focus {
+  outline: none; border-color: var(--azul);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+.campo__dica { font-size: var(--t-xs); color: var(--cinza-400); margin-top: 2px; }
+
+.linha { display: grid; grid-template-columns: 1fr 1fr; gap: var(--e-4); }
+.linha-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--e-4); }
+
+.filtros {
+  display: flex; align-items: center; gap: var(--e-3);
+  margin-bottom: var(--e-4);
+}
+.filtros select {
+  padding: 0.45rem 0.7rem; border: 1px solid var(--cinza-200);
+  border-radius: 8px; font-family: inherit; font-size: var(--t-sm);
+}
+
+/* --------------------------------------------------------------- Itens --- */
+
+.item {
+  position: relative;
+  border: 1px solid var(--borda);
+  border-radius: var(--raio);
+  padding: var(--e-4);
+  margin-bottom: var(--e-3);
+  background: var(--branco);
+  touch-action: pan-y;
+}
+.item--inativo { opacity: 0.6; border-style: dashed; }
+.item__topo {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: var(--e-3); flex-wrap: wrap;
+}
+.item__nome { font-family: var(--fonte-titulo); font-weight: 600; color: var(--marinho); }
+.item__acoes { display: flex; gap: var(--e-2); flex-wrap: wrap; }
+.item__meta { font-size: var(--t-xs); color: var(--cinza-600); margin-top: 2px; }
+
+/* Cabecalho de item que pode ser arrastado: alcinha + nome/dados + acoes */
+.item__linha {
+  display: flex; align-items: center; gap: var(--e-2);
+  margin-bottom: var(--e-3);
+}
+.item__linha .item__topo { flex: 1; min-width: 0; }
+
+/* Alcinha de arrastar - area de toque generosa pro celular */
+.alca {
+  flex-shrink: 0;
+  width: 40px; height: 40px;
+  display: grid; place-items: center;
+  background: transparent; border: 0; border-radius: 8px;
+  color: var(--cinza-400);
+  cursor: grab;
+  touch-action: none; /* essencial: sem isso, arrastar no celular rola a pagina junto */
+  -webkit-tap-highlight-color: transparent;
+}
+.alca:hover { background: var(--fundo-suave); color: var(--marinho); }
+.alca:focus-visible { outline: 2px solid var(--azul); outline-offset: 2px; }
+
+/* Escala, sombra e a transicao de "pegar"/"soltar" vem via JS (inline),
+   porque precisam ligar e desligar a transicao no momento certo do arraste -
+   aqui so o que nao muda durante o gesto. */
+.item.arrastando {
+  z-index: 20;
+  cursor: grabbing;
+}
+.item.arrastando .alca { cursor: grabbing; color: var(--marinho); }
+
+/* Enquanto uma lista esta em arraste, os vizinhos deslizam suavemente pra
+   abrir espaco (o JS so troca a ordem no DOM; quem anima e essa transicao). */
+.lista--arrastando .item[data-arraste-item] { will-change: transform; }
+.lista--arrastando .item[data-arraste-item]:not(.arrastando) {
+  transition: transform 780ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Sem isso, arrastar com o mouse tende a selecionar o texto da lista junto */
+body.arraste-ativo { user-select: none; -webkit-user-select: none; }
+
+/* Linha de produto: miniatura + dados + acoes */
+.produto { display: flex; gap: var(--e-4); align-items: flex-start; }
+.produto__mini {
+  width: 68px; height: 68px; flex-shrink: 0;
+  border-radius: 8px; overflow: hidden;
+  background: var(--creme); border: 2px dashed var(--marinho);
+  display: grid; place-items: center;
+  font-size: 10px; color: var(--marinho); text-align: center;
+}
+.produto__mini img { width: 100%; height: 100%; object-fit: cover; }
+.produto__mini.tem-foto { border-style: solid; border-color: var(--borda); }
+.produto__dados { flex: 1; min-width: 0; }
+.produto__preco {
+  font-family: var(--fonte-titulo); font-weight: 700; color: var(--marinho);
+}
+
+.tags { display: flex; gap: var(--e-1); flex-wrap: wrap; margin-top: var(--e-2); }
+.tag {
+  font-size: 10px; font-weight: 600; text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 2px 7px; border-radius: var(--raio-pilula);
+  background: var(--cinza-200); color: var(--cinza-600);
+}
+.tag--ok { background: #dcfce7; color: #166534; }
+.tag--alerta { background: #fef3c7; color: #92400e; }
+.tag--off { background: #fee2e2; color: #991b1b; }
+.tag--destaque { background: var(--amarelo-claro); color: var(--marinho); }
+
+/* Preview / upload */
+.midia { display: flex; gap: var(--e-4); align-items: flex-start; margin-bottom: var(--e-4); }
+.midia__preview {
+  width: 140px; flex-shrink: 0;
+  aspect-ratio: 4 / 3;
+  border-radius: 8px; overflow: hidden;
+  background: var(--creme);
+  border: 2px dashed var(--marinho);
+  display: grid; place-items: center;
+  color: var(--marinho); font-size: var(--t-xs); text-align: center; padding: var(--e-2);
+}
+.midia__preview img, .midia__preview video { width: 100%; height: 100%; object-fit: cover; }
+.midia__preview.tem-foto { border-style: solid; border-color: var(--borda); }
+.midia__controles { flex: 1; min-width: 0; }
+
+.toggle { display: inline-flex; align-items: center; gap: var(--e-2); cursor: pointer;
+  font-size: var(--t-xs); color: var(--marinho); font-weight: 600; }
+.toggle input { width: 17px; height: 17px; accent-color: var(--azul); cursor: pointer; }
+.toggles { display: flex; gap: var(--e-4); flex-wrap: wrap; margin-bottom: var(--e-4); }
+
+/* -------------------------------------------------------------- Botoes --- */
+
+.btn-a {
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--e-2);
+  font-family: var(--fonte-titulo); font-weight: 600; font-size: var(--t-xs);
+  padding: 0.5rem 1rem;
+  border: 2px solid transparent; border-radius: var(--raio-pilula);
+  cursor: pointer; text-decoration: none;
+  transition: background var(--transicao), color var(--transicao);
+}
+.btn-a--primario { background: var(--amarelo); color: var(--marinho); }
+.btn-a--primario:hover { background: var(--amarelo-claro); }
+.btn-a--marinho { background: var(--marinho); color: var(--branco); }
+.btn-a--marinho:hover { background: var(--azul); }
+.btn-a--fantasma { background: transparent; color: var(--cinza-600); border-color: var(--cinza-200); }
+.btn-a--fantasma:hover { border-color: var(--cinza-400); color: var(--cinza-800); }
+.btn-a--perigo { background: transparent; color: #b91c1c; border-color: #fca5a5; }
+.btn-a--perigo:hover { background: #b91c1c; color: var(--branco); }
+.btn-a[disabled] { opacity: 0.55; cursor: not-allowed; }
+.btn-a:focus-visible { outline: 3px solid var(--azul); outline-offset: 2px; }
+.largura-total { width: 100%; }
+
+/* ------------------------------------------------------ Estados vazios --- */
+
+.vazio {
+  text-align: center; padding: var(--e-12) var(--e-6);
+  border: 2px dashed var(--cinza-200); border-radius: var(--raio);
+  color: var(--cinza-600); background: var(--branco);
+}
+.vazio p { margin: 0 0 var(--e-4); }
+
+.carregando { color: var(--cinza-400); padding: var(--e-6); text-align: center; }
+
+/* -------------------------------------------------------------- Avisos --- */
+
+.aviso { padding: 0.65rem 0.9rem; border-radius: 8px; font-size: var(--t-xs); margin-bottom: var(--e-4); }
+.aviso--erro { background: #fee2e2; color: #991b1b; }
+.aviso--ok { background: #dcfce7; color: #166534; }
+.aviso[hidden] { display: none; }
+
+#toast {
+  position: fixed; bottom: var(--e-6); right: var(--e-6); z-index: 200;
+  background: var(--marinho); color: var(--branco);
+  padding: 0.75rem 1.2rem; border-radius: var(--raio-pilula);
+  box-shadow: var(--sombra-alta);
+  font-size: var(--t-xs); font-family: var(--fonte-titulo); font-weight: 600;
+  max-width: 360px;
+  transition: opacity var(--transicao), transform var(--transicao);
+}
+#toast[hidden] { display: none; }
+#toast.escondendo { opacity: 0; transform: translateY(10px); }
+
+/* --------------------------------------------------------------- Modal --- */
+
+.modal {
+  position: fixed; inset: 0; z-index: 150;
+  background: rgba(30, 58, 138, 0.45);
+  display: grid; place-items: center;
+  padding: var(--e-4);
+}
+.modal[hidden] { display: none; }
+.modal__caixa {
+  background: var(--branco); border-radius: var(--raio);
+  padding: var(--e-6);
+  width: 100%; max-width: 560px;
+  max-height: 90vh; overflow-y: auto;
+  box-shadow: var(--sombra-alta);
+}
+.modal__caixa h2 { margin-bottom: var(--e-4); }
+.modal__acoes {
+  display: flex; justify-content: flex-end; gap: var(--e-2);
+  margin-top: var(--e-6); padding-top: var(--e-4);
+  border-top: 1px solid var(--borda);
+}
+
+/* ---------------------------------------------------------- Responsivo --- */
+
+@media (max-width: 820px) {
+  .painel { grid-template-columns: 1fr; }
+  .lateral { position: static; height: auto; }
+  .menu { flex-direction: row; flex-wrap: wrap; }
+  /* Grid/flex nao encolhem um filho abaixo do tamanho minimo do proprio
+     conteudo por padrao - um rotulo comprido tipo "Destaques do início"
+     bastava pra empurrar a lateral, e a pagina inteira, pra fora da tela.
+     min-width:0 quebra essa trava em cada nivel da cadeia. */
+  .painel > *, .lateral__marca, .menu, .menu__item, .lateral__rodape,
+  .conteudo, .secao-admin, .bloco { min-width: 0; }
+  .conteudo { padding: var(--e-4); }
+  .linha, .linha-3 { grid-template-columns: 1fr; }
+  .produto { flex-direction: column; }
+  .midia { flex-direction: column; }
+  .midia__preview { width: 100%; max-width: 220px; }
+
+  /* 16px no minimo evita o iOS dar zoom automatico ao focar um campo */
+  .campo input, .campo select, .campo textarea { font-size: 16px; }
+  .btn-a { padding: 0.65rem 1.2rem; font-size: var(--t-sm); }
+  .alca { width: 44px; height: 44px; }
+}

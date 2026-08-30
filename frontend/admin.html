@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Entrar — Painel Berola Ingleses</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Nunito+Sans:wght@400;600&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="/css/tokens.css">
+<link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+
+<!-- Cobre a tela inteira assim que a pagina carrega - o transicao.js encolhe
+     esse circulo pra revelar o login, dando sequencia a animacao que comecou
+     no clique do botao escondido, na pagina anterior. -->
+<div id="cobertura-circulo" aria-hidden="true"></div>
+
+<!-- ============================================================== Login -->
+<div class="login" id="tela-login" hidden>
+  <form class="login__caixa" id="form-login">
+    <h2>Painel Berola</h2>
+    <p>Entre para editar o conteúdo do site.</p>
+    <div class="aviso aviso--erro" id="login-erro" hidden></div>
+    <div class="campo">
+      <label for="usuario">Usuário</label>
+      <input type="text" id="usuario" autocomplete="username" required autofocus>
+    </div>
+    <div class="campo">
+      <label for="senha">Senha</label>
+      <input type="password" id="senha" autocomplete="current-password" required>
+    </div>
+    <button class="btn-a btn-a--primario largura-total" type="submit" id="btn-entrar">Entrar</button>
+  </form>
+</div>
+
+<div id="toast" hidden></div>
+
+<script type="module" src="/js/login.js"></script>
+</body>
+</html>
