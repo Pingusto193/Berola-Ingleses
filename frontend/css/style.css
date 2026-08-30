@@ -207,6 +207,7 @@ img { max-width: 100%; display: block; }
   height: 42px;
   width: auto;
   overflow: visible;
+  transform: translateY(7px);
 }
 
 .nav { display: flex; gap: var(--e-6); }
