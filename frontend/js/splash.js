@@ -36,7 +36,7 @@ export function iniciarSplash() {
     }, 850); // bate com a transicao dos paineis no CSS
   }
 
-  const relogio = setTimeout(encerrar, 1800);
+  const relogio = setTimeout(encerrar, 3000);
   splash.addEventListener('click', () => { clearTimeout(relogio); encerrar(); });
   window.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' || e.key === 'Enter' || e.key === ' ') {

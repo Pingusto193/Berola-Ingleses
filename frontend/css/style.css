@@ -196,7 +196,18 @@ img { max-width: 100%; display: block; }
   display: flex; align-items: center; justify-content: space-between;
   gap: var(--e-6);
 }
-.header__logo { height: 42px; width: auto; }
+.header__interno > a {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  line-height: 0;
+}
+.header__logo {
+  display: block;
+  height: 42px;
+  width: auto;
+  overflow: visible;
+}
 
 .nav { display: flex; gap: var(--e-6); }
 .nav a {
