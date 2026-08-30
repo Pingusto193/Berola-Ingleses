@@ -225,6 +225,7 @@ img { max-width: 100%; display: block; }
   display: none;
   background: none; border: 0; cursor: pointer;
   padding: var(--e-2); color: var(--marinho);
+  transform: translateY(7px);
 }
 
 /* --------------------------------------------------------------- Hero ---- */
